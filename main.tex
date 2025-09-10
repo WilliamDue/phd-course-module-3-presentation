@@ -105,7 +105,49 @@
   \end{center}
 \end{frame}
 
-\begin{frame}\frametitle{Something}
+\begin{frame}\frametitle{Languages}
+  % 
+  \begin{itemize}
+    \item Formal languages: Languages that have a formal definition.
+    \item What Formal Languages do you know?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Compilation}
   
+\begin{align*}
+  \mathcal{C}(s, s', \epsilon) \mapsto &
+  \vcenter{
+    \hbox{
+      \begin{tikzpicture}[node distance=2cm, baseline]
+        \node[state] (s) at (0,0) {$s$};
+        \node[state] (sp) at (2,0) {$s'$};
+        \draw[->, thick] (s) -- node[above] {$\epsilon$} (sp);
+      \end{tikzpicture}
+    }
+  } \\
+  \mathcal{C}(s, s', a) \mapsto &
+  \vcenter{
+    \hbox{
+      \begin{tikzpicture}[node distance=2cm, baseline]
+        \node[state] (s) at (0,0) {$s$};
+        \node[state] (sp) at (2,0) {$s'$};
+        \draw[->, thick] (s) -- node[above] {$a$} (sp);
+      \end{tikzpicture}
+    }
+  }\\
+  \mathcal{C}(s, s', rr') \mapsto &
+  \vcenter{
+    \hbox{
+      \begin{tikzpicture}[node distance=2cm, baseline]
+        \node[state] (s) {$s$};
+        \node[state] (si) [right=of s] {$s''$};
+        \node[state] (sp) [right=of si] {$s'$};
+        \draw[->, dashed, thick] (s) -- node[above] {$\mathcal{C}(s, s'', r)$} (si);
+        \draw[->, dashed, thick] (si) -- node[above] {$\mathcal{C}(s'', s', r')$} (sp);
+      \end{tikzpicture}
+    }
+  }
+\end{align*}
 \end{frame}
 \end{document}
