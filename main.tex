@@ -91,7 +91,7 @@
 \setbeamertemplate{itemize subitem}{\scriptsize$\blacksquare$}
 \setbeamertemplate{itemize subsubitem}{\scriptsize$\blacksquare$}
 
-\title[Hash Maps]{Regular Expressions}
+\title[Programming]{Programming}
 \author{\textbf{William Henrich Due} \inst{1}}
 \institute[shortinst]{\inst{1} Department of Computer Science}
 \date{September 12th, 2025}
@@ -107,70 +107,195 @@
 
 \begin{frame}\frametitle{Intended Learning Outcomes}
   \begin{itemize}
-    \item Come up with compilation rules from Regular Expressions to NFAs.
+    \item Write a simple program as a nondetermistic finite-state automaton (NFA).
+    \item Write a simple program as a determistic finite-state automaton (DFA).
+    \item The ability to differentiate between a NFA and a DFA.
   \end{itemize}
 \end{frame}
 
-\begin{frame}\frametitle{Languages}
-  \begin{itemize}
-    \item Formal languages: Languages that have a formal definition.
-    \item What Formal Languages do you know?
-  \end{itemize}
+\begin{frame}\frametitle{Programming Languages}
+  \begin{center}
+    What Programming Languages do you know?
+  \end{center}
 \end{frame}
 
-\begin{frame}\frametitle{Define Regular Expressions}
-  
+\begin{frame}\frametitle{NFA}
   \begin{itemize}
-    \item Empty string: $\epsilon$
-    \item Some letter: $\alpha$
-    \item Some expression: $\mathcal{R}$
-    \item Concatenation: $\mathcal{R}_0\mathcal{R}_1$
-    \item Pattern to find: $sos$
-    
-    \vspace{10pt}
-    \textbf{Inputs}
+    \item An alphabet that is a finite set of symbols e.g.
     \begin{itemize}
-      \item No match: ${\color{red} something}$
-      \item A match: $ab{\color{green}}$
+      \item English Alphabet.
+      \item Hindu--Arabic numerals.
+      \item Morse code symbols.
     \end{itemize}
+
+    \item A finite set of states $\vcenter{
+      \hbox{
+        \begin{tikzpicture}[baseline]
+          \node[state] (s) {$$};
+        \end{tikzpicture}
+      }
+    }$
+
+    \item Transitions between states labelled by symbols or $\epsilon$.
+    
+    $\vcenter{
+      \hbox{
+        \begin{tikzpicture}[baseline]
+          \node[state] (s) at (0,0) {$$};
+          \node[state] (sp) at (2,0) {$$};
+          \draw[->, thick] (s) -- node[above] {$a,b,c$} (sp);
+        \end{tikzpicture}
+      }
+    }$ $\vcenter{
+      \hbox{
+        \begin{tikzpicture}[baseline]
+          \node[state] (s) at (0,0) {$$};
+          \node[state] (sp) at (2,0) {$$};
+          \draw[->, thick] (s) -- node[above] {$\epsilon$} (sp);
+        \end{tikzpicture}
+      }
+    }$
+
+    \item A single initial state.
+    $\vcenter{
+      \hbox{
+        \begin{tikzpicture}[baseline]
+          \node[state, initial] (s) {$$};
+        \end{tikzpicture}
+      }
+    }$
+    \item Zero or more accepting states.
+    $\vcenter{
+      \hbox{
+        \begin{tikzpicture}[baseline]
+          \node[state, accepting] (s) {$$};
+        \end{tikzpicture}
+      }
+    }$
   \end{itemize}
 \end{frame}
 
-\begin{frame}\frametitle{Compilation}
-  
-\begin{align*}
-  \mathcal{C}(s, s', \epsilon) \mapsto &
-  \vcenter{
-    \hbox{
-      \begin{tikzpicture}[node distance=2cm, baseline]
-        \node[state] (s) at (0,0) {$s$};
-        \node[state] (sp) at (2,0) {$s'$};
-        \draw[->, thick] (s) -- node[above] {$\epsilon$} (sp);
-      \end{tikzpicture}
-    }
-  } \\
-  \mathcal{C}(s, s', \alpha) \mapsto &
-  \vcenter{
-    \hbox{
-      \begin{tikzpicture}[node distance=2cm, baseline]
-        \node[state] (s) at (0,0) {$s$};
-        \node[state] (sp) at (2,0) {$s'$};
-        \draw[->, thick] (s) -- node[above] {$\alpha$} (sp);
-      \end{tikzpicture}
-    }
-  }\\
-  \mathcal{C}(s, s', \mathcal{R}_0\mathcal{R}_1) \mapsto &
-  \vcenter{
-    \hbox{
-      \begin{tikzpicture}[node distance=2cm, baseline]
-        \node[state] (s) {$s$};
-        \node[state] (si) [right=of s] {$s''$};
-        \node[state] (sp) [right=of si] {$s'$};
-        \draw[->, dashed, thick] (s) -- node[above] {$\mathcal{C}(s, s'', \mathcal{R}_0)$} (si);
-        \draw[->, dashed, thick] (si) -- node[above] {$\mathcal{C}(s'', s', \mathcal{R}_1)$} (sp);
-      \end{tikzpicture}
-    }
-  }
-\end{align*}
+\begin{frame}\frametitle{NFA Simulation}
+  \begin{center}
+    \begin{tikzpicture}[shorten >=1pt, node distance=2.6cm, on grid, auto, >=stealth', baseline]
+      % Step overlays for states
+      % Initial state
+      \only<1,2-4,6-7,9->{\tikzset{stateq0/.style={state, initial, fill=none}}}
+      \only<2,5,8>{\tikzset{stateq0/.style={state, initial, fill=palepurple, ultra thick}}}
+
+      % Accepting state (top)
+      \only<1-2,4->{\tikzset{stateq1/.style={state, accepting, fill=none}}}
+      \only<3>{\tikzset{stateq1/.style={state, accepting, fill=palepurple, ultra thick}}}
+      
+      % Intermediate state (middle)
+      \only<1-8,10->{\tikzset{stateq2/.style={state, fill=none}}}
+      \only<9>{\tikzset{stateq2/.style={state, fill=palepurple, ultra thick}}}
+      
+      % Accepting state (right)
+      \only<1-9,11->{\tikzset{stateq3/.style={state, accepting, fill=none}}}
+      \only<10>{\tikzset{stateq3/.style={state, accepting, fill=palepurple, ultra thick}}}
+      
+      % Accepting state (bottom, epsilon)
+      \only<1-5,7->{\tikzset{stateq4/.style={state, accepting, fill=none}}}
+      \only<6>{\tikzset{stateq4/.style={state, accepting, fill=palepurple, ultra thick}}}
+      
+      % Edge overlays
+      \only<1-2,4->{\tikzset{edgea1/.style={}}}
+      \only<3>{\tikzset{edgea1/.style={\darkpalepurple, line width=1.5pt}}}
+      
+      \only<1-8,9->{\tikzset{edgea2/.style={}}}
+      \only<9>{\tikzset{edgea2/.style={\darkpalepurple, line width=1.5pt}}}
+      
+      \only<1-9,11->{\tikzset{edgea3/.style={}}}
+      \only<10>{\tikzset{edgea3/.style={\darkpalepurple, line width=1.5pt}}}
+      
+      \only<1-5,7->{\tikzset{edgeeps/.style={}}}
+      \only<6>{\tikzset{edgeeps/.style={\darkpalepurple, line width=1.5pt}}}
+      
+      % Nodes
+      \node[stateq0] (q0) {};
+      \node[stateq1] (q1) [above right=2cm and 2cm of q0] {};
+      \node[stateq2] (q2) [right=of q0] {};
+      \node[stateq3] (q3) [right=of q2] {};
+      \node[stateq4] (q4) [below right=2cm and 2cm of q0] {};
+      
+      % Edges
+      \draw[->,edgea1] (q0) -- node[above left] {$a,b$} (q1);
+      \draw[->,edgea2] (q0) -- node[above] {$a$} (q2);
+      \draw[->,edgea3] (q2) -- node[above] {$b$} (q3);
+      \draw[->,edgeeps] (q0) -- node[left] {$\epsilon$} (q4);
+    \end{tikzpicture}
+
+    \vspace{10pt}
+    % Input string animation
+    \only<1-2,4-8>{\Huge\bfseries\color{gray}ab}
+    \only<3,9>{\Huge\bfseries\color{\darkpalepurple}a\color{gray}b}
+    \only<10>{\Huge\bfseries\color{gray}a\color{\darkpalepurple}b}
+    \only<11>{\Huge\bfseries\color{\darkpalepurple}ab}
+    \vspace{10pt}
+    % Acceptance message
+    \only<11>{\Large\bfseries\color{\darkpalepurple}Accepted!}
+  \end{center}
 \end{frame}
+
+\begin{frame}\frametitle{Your turn}
+  \begin{center}
+    Create a NFA that determines if a non-negative integer is even.
+  \end{center}
+\end{frame}
+
+\begin{frame}\frametitle{DFA}
+  \begin{itemize}
+    \item Subset of NFAs.
+
+    \item No $\epsilon$ transitions allowed.
+    
+    $\vcenter{
+      \hbox{
+        \begin{tikzpicture}[baseline]
+          % Original states and transition
+          \node[state] (s) at (0,0) {};
+          \node[state] (sp) at (2,0) {};
+          \draw[->, thick] (s) -- node[above] {$\epsilon$} (sp);
+    
+        % Big red X over the diagram
+        \draw[red, very thick] (-0.0,1.0) -- (2.0,-1.0);
+        \draw[red, very thick] (-0.0,-1.0) -- (2.0,1.0);
+      \end{tikzpicture}
+    }
+    }$
+
+    \item No state may have more than one outgoing transition per symbol.
+    
+    $\vcenter{
+      \hbox{
+        \begin{tikzpicture}[baseline]
+          \node[state] (s) at (0,0) {$$};
+          \node[state] (sp) at (2,0) {$$};
+          \node[state] (si) at (-2,0) {$$};
+          \draw[->, thick] (s) -- node[above] {$a$} (sp);
+          \draw[->, thick] (s) -- node[above] {$a$} (si);
+
+          \draw[red, very thick] (-2.0,1.0) -- (2.0,-1.0);
+          \draw[red, very thick] (-2.0,-1.0) -- (2.0,1.0);
+        \end{tikzpicture}
+      }
+    }$
+    \item Why do this?
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Your turn}
+  \begin{center}
+    Create a DFA that determines if a non-negative integer is even.
+  \end{center}
+\end{frame}
+
+\begin{frame}\frametitle{We are done}
+  \begin{center}
+    We are done.
+  \end{center}
+\end{frame}
+
 \end{document}
