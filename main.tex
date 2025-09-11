@@ -105,11 +105,34 @@
   \end{center}
 \end{frame}
 
+\begin{frame}\frametitle{Intended Learning Outcomes}
+  \begin{itemize}
+    \item Come up with compilation rules from Regular Expressions to NFAs.
+  \end{itemize}
+\end{frame}
+
 \begin{frame}\frametitle{Languages}
-  % 
   \begin{itemize}
     \item Formal languages: Languages that have a formal definition.
     \item What Formal Languages do you know?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Define Regular Expressions}
+  
+  \begin{itemize}
+    \item Empty string: $\epsilon$
+    \item Some letter: $\alpha$
+    \item Some expression: $\mathcal{R}$
+    \item Concatenation: $\mathcal{R}_0\mathcal{R}_1$
+    \item Pattern to find: $sos$
+    
+    \vspace{10pt}
+    \textbf{Inputs}
+    \begin{itemize}
+      \item No match: ${\color{red} something}$
+      \item A match: $ab{\color{green}}$
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
@@ -126,25 +149,25 @@
       \end{tikzpicture}
     }
   } \\
-  \mathcal{C}(s, s', a) \mapsto &
+  \mathcal{C}(s, s', \alpha) \mapsto &
   \vcenter{
     \hbox{
       \begin{tikzpicture}[node distance=2cm, baseline]
         \node[state] (s) at (0,0) {$s$};
         \node[state] (sp) at (2,0) {$s'$};
-        \draw[->, thick] (s) -- node[above] {$a$} (sp);
+        \draw[->, thick] (s) -- node[above] {$\alpha$} (sp);
       \end{tikzpicture}
     }
   }\\
-  \mathcal{C}(s, s', rr') \mapsto &
+  \mathcal{C}(s, s', \mathcal{R}_0\mathcal{R}_1) \mapsto &
   \vcenter{
     \hbox{
       \begin{tikzpicture}[node distance=2cm, baseline]
         \node[state] (s) {$s$};
         \node[state] (si) [right=of s] {$s''$};
         \node[state] (sp) [right=of si] {$s'$};
-        \draw[->, dashed, thick] (s) -- node[above] {$\mathcal{C}(s, s'', r)$} (si);
-        \draw[->, dashed, thick] (si) -- node[above] {$\mathcal{C}(s'', s', r')$} (sp);
+        \draw[->, dashed, thick] (s) -- node[above] {$\mathcal{C}(s, s'', \mathcal{R}_0)$} (si);
+        \draw[->, dashed, thick] (si) -- node[above] {$\mathcal{C}(s'', s', \mathcal{R}_1)$} (sp);
       \end{tikzpicture}
     }
   }
