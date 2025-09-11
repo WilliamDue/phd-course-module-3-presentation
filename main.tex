@@ -136,7 +136,7 @@
       }
     }$
 
-    \item Transitions between states labelled by symbols or $\epsilon$.
+    \item Transitions between states labelled by symbols or $\varepsilon$.
     
     $\vcenter{
       \hbox{
@@ -151,7 +151,7 @@
         \begin{tikzpicture}[baseline]
           \node[state] (s) at (0,0) {$$};
           \node[state] (sp) at (2,0) {$$};
-          \draw[->, thick] (s) -- node[above] {$\epsilon$} (sp);
+          \draw[->, thick] (s) -- node[above] {$\varepsilon$} (sp);
         \end{tikzpicture}
       }
     }$
@@ -223,7 +223,7 @@
       \draw[->,edgea1] (q0) -- node[above left] {$a,b$} (q1);
       \draw[->,edgea2] (q0) -- node[above] {$a$} (q2);
       \draw[->,edgea3] (q2) -- node[above] {$b$} (q3);
-      \draw[->,edgeeps] (q0) -- node[left] {$\epsilon$} (q4);
+      \draw[->,edgeeps] (q0) -- node[left] {$\varepsilon$} (q4);
     \end{tikzpicture}
 
     \vspace{10pt}
@@ -248,7 +248,7 @@
   \begin{itemize}
     \item Subset of NFAs.
 
-    \item No $\epsilon$ transitions allowed.
+    \item No $\varepsilon$ transitions allowed.
     
     $\vcenter{
       \hbox{
@@ -256,7 +256,7 @@
           % Original states and transition
           \node[state] (s) at (0,0) {};
           \node[state] (sp) at (2,0) {};
-          \draw[->, thick] (s) -- node[above] {$\epsilon$} (sp);
+          \draw[->, thick] (s) -- node[above] {$\varepsilon$} (sp);
     
         % Big red X over the diagram
         \draw[red, very thick] (-0.0,1.0) -- (2.0,-1.0);
